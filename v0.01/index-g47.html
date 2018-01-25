@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Project Dig - g47</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script src="js/game.js" type="text/javascript"></script>
+</head>
+<body>
+	<div id="sidebar">
+		<iframe src="iframe/sidebar.html"></iframe>
+	</div>
+
+	<div id="story">
+		<p>You wake up in a swamp. You're cold.</p>
+	</div>
+	<div id="inv">
+		<p id="wood">Wood: <span id="woodCounter">0</span>/<span id="woodCounterMax">0</span></p>
+	</div>
+	<div id="actions">
+		<button id="gatherWood">Gather Wood</button>
+		<button id="buildFire" style="display:none">Build Campfire (50 wood)</button>
+	</div>
+
+	<script type="text/javascript">
+
+	const game = new Game();
+
+
+	// game.player = new Player;
+
+	// game.inv.wood = new Resource('wood', 'chop wood');
+	// game.inv.dirt = new Resource('dirt', 'dig dirt');
+	// game.inv.stone = new Resource('stone', 'mine stone');
+
+	</script>
+</body>
+</html>

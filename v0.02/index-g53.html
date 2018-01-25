@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>projectdig - g53</title>
+</head>
+<body>
+<div id="story"></div>
+</body>
+<script type="text/javascript">
+	class Game {
+		constructor() {
+			this.inv = {
+				explore: 0,
+				story: 0,
+			};
+			console.log('start game');
+		};
+
+		addButton(label, callback) {
+			var el = document.createElement('button');
+			el.id = label + 'Action';
+			el.innerHTML = label + ' [' + this.inv.explore + ']';
+			el.addEventListener('click', (e) => {
+				console.log('button '+ el.id + ' clicked');
+				console.log(e.target.id);
+				callback(e);
+			});
+
+			document.body.appendChild(el);
+		};
+
+		explore() {
+			console.log('explore event');
+			this.inv.explore++;
+			var button = document.getElementById('ExploreAction');
+			button.innerHTML = 'Explore [' + this.inv.explore + ']';
+			this.checkEvents();
+		};
+
+		checkEvents() {
+			if (this.inv.explore >= 5) {
+				this.storyProgression();
+			}
+
+		}
+
+		gather() {
+			console.log('gather');
+		};
+
+		storyProgression() {
+			var storyline = new Array;
+			storyline.push("You wake up, cold, and wet, a thick mist hangs in the air.");
+			storyline.push("The fog is thick, you only see a few feet in front of you.");
+			storyline.push("You found a sticks, you've got to dry off, lest freeze to death.");
+
+			var storyDiv = document.getElementById('story');
+			var storyMsg = document.createElement('p');
+			storyMsg.innerHTML = storyline[this.inv.story];
+			storyDiv.appendChild(storyMsg);
+
+			this.inv.story++;
+		}
+	}
+
+	var g = new Game();
+	g.addButton('Explore', () => {g.explore()});
+
+	console.log(g, 'game');
+	g.storyProgression();
+</script>
+</html>

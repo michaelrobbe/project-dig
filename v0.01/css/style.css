@@ -1,0 +1,12 @@
+#sidebar {
+	float: right;
+	height: 100%;
+	width: 500px;
+}
+
+#sidebar iframe {
+	height: calc(100vh - 20px);
+	width: 100%;
+	border: 2px solid gray;
+	font-family: helvetica;
+}

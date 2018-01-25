@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Dig-g45</title>
+</head>
+<body>
+
+</body>
+<script>
+	var game = {};
+
+	class UI {
+		constructor() {
+			console.log('UI constructor');
+		}
+
+		generate(tag, label, verb, event, callback) {
+			var el = document.createElement(tag);
+			el.value = verb;
+			el.id = verb + tag;
+			el.innerHTML = label;
+			if (event !== undefined) {
+				el.addEventListener(event, () => {
+					callback()
+				});
+			};
+
+			document.body.appendChild(el);
+		}
+
+		generateButton(label, verb, callback) {
+			this.generate('button', label, verb, 'click', callback);
+		}
+
+		generateInv(verb, value) {
+			this.generate('p', value, verb);
+		}
+
+		updateElement(id) {
+			var el = document.getElementById(id);
+			console.log(id, 'el');
+			console.log(this.value, 'updateElement.value');
+			el.innerHTML = this.value;
+		}
+	}
+
+	class Resource extends UI {
+		constructor(label, verb) {
+			super();
+
+			this.label = label;
+			this.verb = verb;
+			this.value = 0;
+			this.step = 1;
+			this.max = 10;
+
+
+			this.generateButton(this.label, this.verb, () => {
+				this.gather();
+			});
+
+			this.generateInv(this.label, this.value);
+			console.log('Resource constructor', this);
+		};
+
+		gather() {
+			this.value += this.step;
+			console.log(this.label, '+1');
+			// console.log(game);
+			this.updateElement(this.label + 'p');
+		};
+	}
+
+	class Structure extends UI {
+		constructor(label, basecost) {
+			super();
+
+			this.label = label;
+			this.basecost = basecost;
+			this.generateButton(this.label, this.verb, () => {
+				this.purchase();
+			})
+		};
+
+		purchase() {
+			console.log('Purchased ' + this.label, this.basecost);
+		}
+	}
+
+	game.inv = {};
+	game.inv.dirt = new Resource('dirt', 'dig');
+	game.inv.wood = new Resource('wood', 'chop');
+	game.inv.stone = new Resource('stone', 'mine');
+
+	game.structures.pile = new Structure('pile', {'w':50});
+	// game.inv.dirt.generateButton('dig', () => {console.log('dig++')});
+</script>
+</html>

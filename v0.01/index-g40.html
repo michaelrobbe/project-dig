@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Digger v0.0.1c</title>
+</head>
+<body>
+	<p>Hole Status: <span id="holeDepth">0</span>m x <span id="holeWidth">0</span>m</p>
+	<p>Inventory: </p>
+	<p>Dirt: <span id="dirt">0</span>kg</p>
+</body>
+<script>
+	document.addEventListener('DOMContentLoaded', ready);
+
+	var game = {
+		hole: {
+			depth: 0,
+			width: 0
+		},
+		inv: {
+			dirt: 0,
+			gravel: 0,
+			clay: 0,
+			stone: 0,
+			junk: 0,
+			metal: 0
+		},
+		dig: (direction) => {
+			console.log(direction, 'direction');
+
+			// 1 cubic meter of topsoil == 1602.8 kg
+
+			game.hole.depth += 0.05;
+			game.hole.width += 0.03;
+			game.inv.dirt += 0.2;
+
+			var width = document.getElementById('holeWidth');
+			var depth = document.getElementById('holeDepth');
+			var dirt = document.getElementById('dirt');
+
+			width.innerHTML = game.hole.width.toPrecision(2);
+			depth.innerHTML = game.hole.depth.toPrecision(2);
+			dirt.innerHTML = game.inv.dirt.toPrecision(2);
+		},
+		save: () => {
+			localStorage.setItem(game);
+		},
+		load: () => {
+
+		}
+	}
+	function ready() {
+		console.log("ready");
+
+		// var button = HTMLButtonElement;
+		var button = document.createElement("button");
+		button.value = 'dig';
+		button.id = 'dig';
+		button.type = 'button';
+		button.innerHTML = 'dig';
+
+		document.body.appendChild(button);
+
+		// console.log(document.body, 'docbody');
+		// console.log(button, 'dat button doe');
+		var g = game;
+		document.getElementById('dig');
+		addEventListener('click', () => {
+			console.log('dig action');
+
+			g.dig('down');
+		})
+
+		window.setInterval(() => {
+			console.log('interval1000')
+		}, 1000);
+	}
+</script>
+</html>

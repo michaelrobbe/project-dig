@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Project Dig - g44</title>
+	<style>
+		#sidebar {
+			float: right;
+		}
+	</style>
+</head>
+<body>
+	<div id="sidebar">
+		<ol>
+			<li>Game object</li>
+			<li>Player class</li>
+			<ul>
+				<li>inventory</li>
+				<li>upgrades</li>
+				<li>structures</li>
+				<li>friendlies<li>
+			</ul>
+			<li>Time ticker</li>
+			<li>Resource Class</li>
+			<ul>
+				<li>label</li>
+				<li>button</li>
+				<li>action</li>
+				<li>modifiers</li>
+			</ul>
+			<li>structure class</li>
+			<ul>
+				<li>quantity</li>
+				<li>cost</li>
+				<li>buildtime</li>
+				<li>level</li>
+			</ul>
+			<li>objectives/quests</li>
+			<li>npc class</li>
+			<li>map class</li>
+		</ol>
+	</div>
+</body>
+<script type="text/javascript">
+
+	var game = {};
+
+	class Player {
+		constructor() {
+			game.inv = {},
+			game.upgrades = {},
+			game.structures = {},
+			game.friendlies = {},
+
+			console.log('constructed');
+		}
+	};
+
+	class Resource {
+		constructor(label, verb) {
+			this.label = label;
+			this.verb = verb;
+			this.value = 0;
+			this.max = 50;
+			this.step = 1;
+
+			this.generateButton();
+			this.generateUI();
+			console.log(this.label);
+		};
+
+		gather() {
+			console.log(this);
+			if (this.value < this.max) {
+				this.value += this.step;
+				this.updateUI();
+			} else {
+				console.log('error:', this.label + " is full!")
+			}
+		};
+
+		generateUI() {
+			var p = document.createElement('p');
+			p.id = this.label + 'Inv';
+			var resourceInv = document.createTextNode(this.value + '/' + this.max);
+			document.body.appendChild(p);
+			p.appendChild(resourceInv);
+		}
+
+		updateUI() {
+			var d = document.getElementById(this.label + 'Inv');
+			d.innerHTML = this.value + '/' + this.max;
+		};
+
+		generateButton() {
+			var button = document.createElement('button');
+			button.value = this.verb;
+			button.innerHTML = this.verb + ' [' + this.step + ']';
+			button.id = this.label + "Button";
+			button.addEventListener('click', () => {
+				this.gather();
+			});
+
+			document.body.appendChild(button);
+		};
+	}
+
+	game.player = new Player;
+
+	game.ticker = function() {
+		setInterval(tickerCallback, 1000);
+
+		function tickerCallback() {
+			console.log('X potato');
+		}
+	};
+
+	class Structure {
+		constructor(label, baseCost, mod) {
+			this.label = label,
+			this.cost = baseCost,
+			this.modifier = mod,
+			this.value = 0;
+
+			this.generateButton() {
+
+			}
+		};
+
+		// Create Game functions for UI Generation/Update that these classes can inherit/extend
+		generateUI() {
+			var p = document.createElement('p');
+			p.id = this.label + 'Inv';
+			var structureCount = document.createTextNode(this.value);
+			document.body.appendChild(p);
+			p.appendChild(structureCount);
+		}
+
+		updateUI() {
+			var d = document.getElementById(this.label + 'Inv');
+			d.innerHTML = this.value + '/' + this.max;
+		};
+
+		generateButton() {
+			var button = document.createElement('button');
+			button.value = this.label;
+			button.innerHTML = 'buy' + this.label + ' [' + this.cost + ']';
+			button.id = this.label + "Button";
+			button.addEventListener('click', () => {
+				this.purchase();
+			});
+
+			document.body.appendChild(button);
+		};
+
+		purchase() {
+			for (var i = this.cost.length - 1; i >= 0; i--) {
+				console.log(this.cost[i]);
+			}
+		}
+	}
+
+	// game.ticker();
+	game.inv.wood = new Resource('wood', 'chop wood');
+	game.inv.dirt = new Resource('dirt', 'dig dirt');
+	game.inv.stone = new Resource('stone', 'mine stone');
+
+	console.log('game file', game);
+</script>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Project Dig - g46</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		div {
+			border: 2px solid black;
+			margin: 0.5vw 0.5vw;
+			height: 40vh;
+			width: 40vw;
+			float: left;
+		}
+		h1 {
+			font-family: tahoma;
+			font-size: 32px;
+		}
+	</style>
+</head>
+<body>
+	<div id="storytime">
+		<h1>Storytime</h1>
+		<button id="hut"></button>
+		<button id="campfire"></button>
+	</div>
+	<div id="messages">
+		<h1>Messages + Alerts</h1>
+	</div>
+	<div id="inv">
+		<h1>Inv</h1>
+		<ul>
+			<li><p id="dirt"></p></li>
+			<li><p id="stone"></p></li>
+			<li><p id="wood"></p></li>
+			<li><p id="flint"></p></li>
+		</ul>
+	</div>
+	<div id="sidebar">
+		<ul>
+			<li>Create a Structure Class</li>
+			<ul>
+				<li>Structure Name, Quantity, Upgrades, Cost, Step, Callback</li>
+				<li>fn canAfford()</li>
+				<li>fn purchase()</li>
+			</ul>
+			<li>Purchase with inv object</li>
+			<li>Make Prettier CSS/Tables</li>
+			<li></li>
+		</ul>
+	</div>
+</body>
+
+<script type="text/javascript">
+
+	class Game {
+		constructor() {
+			this.inv = {};
+			this.inv.dirt = 50;
+			this.inv.wood = 50;
+			this.inv.stone = 50;
+			this.inv.flint = 50;
+
+			this.invDirt = document.querySelector("#dirt");
+			this.invWood = document.querySelector("#wood");
+			this.invStone = document.querySelector("#stone");
+			this.invFlint = document.querySelector("#flint");
+			this.updateUI();
+
+			console.log('Game Class Contructed');
+		}
+
+		updateUI() {
+			this.invDirt.innerHTML = this.inv.dirt + " dirt";
+			this.invWood.innerHTML = this.inv.wood + " wood";
+			this.invStone.innerHTML = this.inv.stone + " stone";
+			this.invFlint.innerHTML = this.inv.flint + " flint";
+		}
+	}
+
+	class Structure {
+		constructor(label, dictionary, cost) {
+			// console.log(super);
+			this.game = Game;
+
+			this.label = label;
+			this.dictionary = dictionary;
+			this.cost = cost;
+
+			this.button = document.getElementById(this.label);
+			this.button.innerHTML = this.dictionary.verb + " " + this.dictionary.noun;
+			this.button.addEventListener('click', () => {
+				this.purchase();
+			});
+
+			console.log('New Structure', this);
+		};
+
+		purchase() {
+			this.canAfford(this.cost);
+			console.log('deducted from:', this.cost);
+		};
+
+		canAfford(cost) {
+			// console.log('this', this.game);
+			// console.log('canAfford', this.inv);
+			// console.log('canAfford', cost.keys.length);
+
+			for (var resource in cost) {
+				console.log('canAfford', resource);
+			}
+		}
+	}
+
+
+	document.addEventListener('DOMContentLoaded', () => {
+
+		const g = new Game();
+
+		g.campfire = new Structure('campfire', {
+				'noun':'campfire',
+				'plural':'campfires',
+				'verb':'light',
+				'pasttense': 'lit'
+			},
+			{'wood':10, 'flint':3}
+		);
+		g.hut = new Structure('hut', {
+				'noun':'hut',
+				'plural':'huts',
+				'verb':'build',
+				'pasttense': 'built'
+			},
+			{'wood':20, 'stone':20, 'dirt': 10}
+		);
+
+
+		console.log('game', g);
+	});
+</script>
+</html>

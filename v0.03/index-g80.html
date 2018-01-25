@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Project Dig - g80 (g79)</title>
+	<style>
+.obj {
+	float: right;
+}
+	</style>
+</head>
+<body>
+	<div class="obj">
+		<ul>
+			<li>Game Object</li>
+			<li>Story Object</li>
+			<li>Player Obj</li>
+			<li>Save / Load</li>
+			<li>Actions Obj</li>
+			<ul>
+				<li>Reach Out</li>
+				<li>Mission: Start Fire</li>
+				<li>Get Sticks, + Rock + Flint</li>
+				<li>Action Set MiniGame(Grind Tinder, Strike Rock, Sparks, Stoke) = Start Fire</li>
+				<li>Story: Mist Retreats</li>
+				<li>Mission: Keep Fire Lit</li>
+				<li>Feed fire</li>
+				<li>Build Torch</li>
+				<li>Find Suitable Firewood</li>
+				<li>Build sleeping mat</li>
+				<li>Story Success: Energized</li>
+			</ul>
+		</ul>
+	</div>
+	<div class="story"></div>
+	<div class="action"></div>
+	<div class="firebuilding"></div>
+
+<script type="text/javascript">
+
+class Game {
+	constructor() {
+		console.log('Game Constructed');
+
+		var ui = new UI();
+		var player = new Player();
+		this.init(ui, player);
+	}
+
+	save() {
+		localStorage.setItem('inv', JSON.stringify(this.inv));
+		console.log('Game Saved', this.inv);
+	}
+
+	load() {
+		var loadGame = localStorage.getItem('inv');
+		if(!loadGame) {
+			console.log('New Game');
+		}
+		else {
+			this.inv = JSON.parse(loadGame);
+			console.log('Game Loaded');
+		}
+	}
+
+	init(ui, player) {
+		this.load();
+		// console.log(ui);
+		// this.oddsTable();
+		// console.log();
+		// this.reachOut();
+		ui.createAction('Reach Out', 'reach', 'action', () => { this.reachOut() });
+	}
+
+	getRandomInt(min, max) {
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
+	}
+
+	oddsTable(items) {
+		var sum = 0;
+		var range = [];
+
+		// convert odds ratio to picker
+		for (var item in items) {
+			sum += items[item];
+			range[item] = sum;
+		}
+
+		// console.log(items);
+		// console.log(range);
+		// console.log(sum, 'sum');
+
+		var picked = this.getRandomInt(1, sum);
+
+		var lastRange = 0;
+		for (var key in range) {
+			if (picked < range[key]) {
+				return key;
+			}
+			lastRange = range[key];
+		}
+	}
+
+	reachOut() {
+		var items = {
+			stick: 5,
+			leaves: 12,
+			stone: 3,
+			flint: 1,
+		};
+
+		var found = this.oddsTable(items);
+		this.inv.found += 1;
+		console.log(this.inv);
+		console.log(found);
+	}
+}
+
+class UI {
+	constructor() {
+		console.log('UI Constructed');
+	}
+
+	createAction(label, id, target, callback) {
+			var button = document.createElement('button');
+			button.value = label;
+			button.innerHTML = label;
+			button.id = id;
+			button.addEventListener('click', callback);
+
+			var domTarget = document.getElementById(target);
+			document.body.appendChild(button);
+	}
+}
+
+class Player {
+	constructor() {
+		this.storyProgress = 0;
+		console.log('Player Constructed');
+	}
+}
+
+var g = new Game();
+</script>
+</body>
+</html>

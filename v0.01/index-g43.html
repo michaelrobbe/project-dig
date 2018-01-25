@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Dig</title>
+</head>
+<body>
+	<div id="story">
+		<p>You wake up in a swamp. You're cold.</p>
+	</div>
+	<div id="inv">
+		<p id="wood">Wood: <span id="woodCounter">0</span>/<span id="woodCounterMax">0</span></p>
+	</div>
+	<div id="actions">
+		<button id="gatherWood">Gather Wood</button>
+		<button id="buildFire" style="display:none">Build Campfire (50 wood)</button>
+	</div>
+</body>
+<script type="text/javascript">
+
+	var game = {};
+	document.addEventListener('DOMContentLoaded', () => {
+		game.ready();
+	});
+
+	var wood = document.getElementById('woodCounter');
+	var woodMax = document.getElementById('woodCounterMax');
+	var gatherW = document.getElementById('gatherWood');
+	var campfireButton = document.getElementById('buildFire');
+
+	game.ready = function() {
+		console.log('ready!');
+
+		game.inv = {};
+		game.inv.wood = {};
+		game.structure = {}
+		game.structure.campfire = {
+			owned: 0,
+			cost: {
+				w: 50,
+			}
+		}
+
+		game.load();
+		game.updateWood();
+
+		gatherW.addEventListener('click', game.gather);
+	}
+
+	game.save = function() {
+		localStorage.setItem('inv', JSON.stringify(game.inv));
+		console.log('game saved', JSON.stringify(game.inv));
+	}
+
+	game.load = function() {
+		var loadInv = localStorage.getItem('inv');
+		if (loadInv) {
+			game.inv = JSON.parse(loadInv);
+			// console.log('game loaded', loadInv);
+		} else {
+			console.log('new game');
+			game.inv.wood.count = 0;
+			game.inv.wood.countMax = 50;
+		}
+	}
+
+	game.gather = function() {
+		console.log('Wood Gathered');
+		if (game.inv.wood.count < game.inv.wood.countMax) {
+			game.inv.wood.count++;
+			game.updateWood();
+		}
+
+		if (game.inv.wood.count > 20) {
+			campfireButton.style = 'block';
+		}
+
+		game.save();
+	}
+
+	game.updateWood = function() {
+		wood.innerHTML = game.inv.wood.count;
+		woodMax.innerHTML = game.inv.wood.countMax;
+	}
+
+	game.buyStructure = function(structure) {
+		if (structure == 'campfire') {
+			if (game.inv.wood.count >)=
+		}
+	}
+
+</script>
+</html>

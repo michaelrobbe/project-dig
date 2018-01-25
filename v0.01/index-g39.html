@@ -1,0 +1,164 @@
+<button id="dig">Dig</button><button id="upgradeDirtPile">Upgrade Dirt Pile</button>
+<p>Earth:
+	<span id="dirt">x</span>/<span id="dirtPile">y</span>
+</p>
+
+<button id="mine">Mine</button><button id="upgradeStonePile">Upgrade Stone Pile</button>
+<p>Stone:
+	<span id="stone">x</span>/<span id="stonePile">y</span>
+</p>
+
+
+<script>
+	digger = {
+	inv: {
+		dirt: 0,
+		stone: 0,
+		murk: 0,
+		scarab: 0,
+		golem: 0,
+	},
+	store: {
+		dirtPile: {
+			name: "Dirt Pile",
+			size: 5,
+			level: 1,
+			cost: 2
+		},
+		stonePile: {
+			name: "Stone Pile",
+			size: 5,
+			level: 1,
+			cost: 5
+		}
+	},
+	worker: {
+			murk: {
+				name: "Murk",
+				level: 1,
+				cost: 5,
+				skills: {
+					dirt: 10,
+					stone: 5,
+					farm: 10,
+				}
+			},
+			scarab: {
+				name: "Scarab",
+				level: 1,
+				cost: 5,
+				skills: {
+					dirt: 10,
+					stone: 10,
+					farm: 5,
+				}
+			},
+			golem: {
+				name: "Golem",
+				level: 1,
+				cost: 10,
+				skills: {
+					dirt: 10,
+					stone: 15,
+					farm: 0,
+				}
+			},
+	},
+	digA() {
+		if (digger.inv.dirt < digger.store.dirtPile.size) {
+			digger.inv.dirt++;
+			// console.log('dig click', digger.inv.dirt);
+		}
+		else {
+			// console.log('dirtpile is full');
+		}
+		digger.updateDirt();
+	},
+
+	mineA() {
+		if (digger.inv.stone < digger.store.stonePile.size) {
+			digger.inv.stone++;
+			// console.log('dig click', digger.inv.dirt);
+		}
+		else {
+			// console.log('dirtpile is full');
+		}
+		digger.updateStone();
+	},
+
+	upgradeDirtPile() {
+		var dp = digger.store.dirtPile
+		if(digger.inv.dirt >= dp.cost) {
+			digger.inv.dirt = digger.inv.dirt - dp.cost; // Purchase; Subtract from Dirt
+			digger.store.dirtPile.level++; // Add Level to Dirtpile
+			digger.store.dirtPile.size = dp.size * 2; // Double Dirtpile size
+			digger.store.dirtPile.cost = (dp.cost / 2) * dp.level; // Upgrade (Cost/2)*Level (2@1, 2@2, 3@3, 6@4, 15@5, 45@6, 153.7@7)
+		}
+
+		digger.updateDirt();
+	},
+	upgradeStonePile() {
+		var dp = digger.store.dirtPile
+		if(digger.inv.dirt >= dp.cost) {
+			digger.inv.dirt = digger.inv.dirt - dp.cost; // Purchase; Subtract from Dirt
+			digger.store.dirtPile.level++; // Add Level to Dirtpile
+			digger.store.dirtPile.size = dp.size * 2; // Double Dirtpile size
+			digger.store.dirtPile.cost = (dp.cost / 2) * dp.level; // Upgrade (Cost/2)*Level (2@1, 2@2, 3@3, 6@4, 15@5, 45@6, 153.7@7)
+		}
+
+		digger.updateDirt();
+	},
+	updateDirt() {
+		// console.log('update dirt');
+		dirtoutput.innerHTML = digger.inv.dirt;
+		dirtpileoutput.innerHTML = digger.store.dirtPile.size;
+		dirtpileupgrade.innerHTML = `Upgrade ${digger.store.dirtPile.name} lv.${digger.store.dirtPile.level} (${digger.store.dirtPile.cost})`;
+
+		// console.log(digger.inv);
+		// var diginv = JSON.stringify(digger.inv);
+		localStorage.setItem('inv', JSON.stringify(digger.inv));
+	},
+
+
+	updateStone() {
+		// console.log('update stone');
+		stoneoutput.innerHTML = digger.inv.stone;
+		stonepileoutput.innerHTML = digger.store.stonePile.size;
+		stonepileupgrade.innerHTML = `Upgrade ${digger.store.stonePile.name} lv.${digger.store.stonePile.level} (${digger.store.stonePile.cost})`;
+
+		// console.log(digger.inv);
+		// var diginv = JSON.stringify(digger.inv);
+		localStorage.setItem('inv', JSON.stringify(digger.inv));
+	},
+}
+
+var digbutton = document.getElementById("dig");
+var dirtoutput = document.getElementById("dirt");
+var dirtpileoutput = document.getElementById("dirtPile");
+var dirtpileupgrade = document.getElementById("upgradeDirtPile");
+
+var minebutton = document.getElementById("mine");
+var stoneoutput = document.getElementById("stone");
+var stonepileoutput = document.getElementById("stonePile");
+var stonepileupgrade = document.getElementById("upgradeStonePile");
+
+var ls = JSON.parse(localStorage.getItem('inv'));
+// console.log(ls, 'ls');
+
+var d = digger;
+d.inv = (ls) ? ls : digger.inv;
+// console.log(d);
+digbutton.addEventListener('click', d.digA);
+minebutton.addEventListener('click', d.mineA);
+dirtpileupgrade.addEventListener('click', d.upgradeDirtPile);
+
+// window.setInterval(function() {
+//   d.digA();
+//   console.log('+1 Resource');
+// }, 1000);
+
+document.addEventListener('DOMContentLoaded', () => {
+	d.updateDirt();
+	d.updateStone();
+}, false);
+</script>

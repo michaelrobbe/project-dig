@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Dig</title>
+</head>
+<body>
+
+<button id="dig" class="action"></button>
+<button id="mine" class="action"></button>
+<button id="farm" class="action"></button>
+
+<ul id="inv"></ul>
+
+<script>
+
+var dig = document.getElementById('dig');
+var mine = document.getElementById('mine');
+var farm = document.getElementById('farm');
+var inv = document.getElementById('inv');
+
+var actions = document.getElementsByTagName('button');
+
+var game = {
+	inv: {
+		dirt: 0,
+		stone: 0,
+		food: 0,
+	},
+	resourceEvent: (e) => {
+		console.log(e.target.id + ' gathered');
+	},
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+	console.log('gold');
+	dig.innerHTML = dig.id;
+	mine.innerHTML = mine.id;
+	farm.innerHTML = farm.id;
+
+	var g = game;
+
+	for(i=0;i<actions.length;i++) {
+		actions[i].addEventListener('click', g.resourceEvent);
+	}
+
+	for(i=0;i<game.inv.length;i++) {
+		var li = HTMLLIElement;
+		li.innerHTML = game.inv[i];
+		inv.appendChild(li);
+	}
+
+});
+</script>
+
+</body>
+</html>
