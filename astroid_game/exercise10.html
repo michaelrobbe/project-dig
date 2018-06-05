@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Animation</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="drawing.js"></script>
+    <script src="objects.js"></script>
+  </head>
+  <body>
+    <h1>Animation</h1>
+    <canvas id="pacman" width="300" height="300" tabindex="1"></canvas>
+    <script>
+      let context = document.getElementById("pacman").getContext("2d");
+
+      context.canvas.addEventListener("keydown", keydown_handler);
+      context.canvas.focus();
+
+      function keydown_handler(e) {
+        let key = e.key || e.keyCode;
+        let nothing_handled = false;
+        switch(key) {
+          case "ArrowLeft":
+          case 37: // left arrow keyCode
+            pacman.move_left();
+            break;
+          case "ArrowUp":
+            case 38: // up arrow keyCode
+              pacman.move_up();
+              break;
+            case "ArrowRight":
+            case 39: // right arrow keyCode
+              pacman.move_right();
+              break;
+            case "ArrowDown":
+            case 40: // down arrow keyCode
+              pacman.move_down();
+              break;
+            default:
+              nothing_handled = true;
+          }
+          if(!nothing_handled) e.preventDefault();
+        }
+
+      pacman = new PacMan(150, 150, 20, 120);
+
+       let ghosts = [
+        new Ghost(Math.random() * 100, Math.random() * 300, 20, 70, 'red'),
+        new Ghost(Math.random() * 200, Math.random() * 200, 20, 60, 'pink'),
+        new Ghost(Math.random() * 300, Math.random() * 100, 20, 50, 'cyan'),
+        new Ghost(Math.random() * 300, Math.random() * 300, 20, 40, 'orange')
+      ]
+
+      function draw(ctx, guide) {
+        pacman.draw(ctx);
+        ghosts.forEach(function(ghost) {
+          ghost.draw(context, guide);
+        });
+      }
+      function update(elapsed) {
+        pacman.update(elapsed, 300, 300);
+        ghosts.forEach(function(ghost) {
+          ghost.update(pacman, elapsed);
+        });
+      }
+      var previous, elapsed;
+      function frame(timestamp) {
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        if (!previous) previous = timestamp;
+        elapsed = timestamp - previous;
+        update(elapsed / 1000);
+        draw(context, true);
+        previous = timestamp;
+        window.requestAnimationFrame(frame);
+      }
+      window.requestAnimationFrame(frame);
+    </script>
+  </body>
+</html>

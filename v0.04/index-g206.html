@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Chapter I : The Bog</title>
+	<script type="text/javascript" src="objects.js"></script>
+	<script type="text/javascript" src="game.js"></script>
+	<style>
+body {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+body div {
+	width: 45vw;
+	border: 2px solid black;
+	margin: 4px;
+	height: 45vh;
+}
+	</style>
+</head>
+<body>
+	<div id="inv"></div>
+	<div id="map"></div>
+	<div id="build"></div>
+	<div id="actions"></div>
+</body>
+<script>
+	var game = new Game();
+</script>
+</html>
